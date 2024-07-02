@@ -3,11 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Code Image</title>
+    <title>QR Code Payment</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            text-align: center;
+        }
+        .amount {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-    <div>
-        <img src="./qrCode.png" alt="QR Code" width="300" height="200">
+    <div class="container">
+        <img src="./qrCode.png" alt="QR Code" width="300" height="300">
+        <br>
+        <div class="amount">Amount: 20 Rs</div>
+
+        <button class="btn">Pay Now</button>
     </div>
 </body>
 </html>
