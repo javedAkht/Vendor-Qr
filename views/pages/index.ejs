@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Payment</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+        }
+        .container {
+            text-align: center;
+        }
+        .info {
+            margin-bottom: 20px;
+        }
+        .amount {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+        .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><%= name %></h1>
+        <div class="info">
+            <p>Contact: <%= contact %></p>
+            <p>Business Location: <%= businessLocation %></p>
+            <p>Current Location: <span id="currentLocation">Fetching...</span></p>
+        </div>
+        <img src="/qrCode.png" alt="QR Code" width="300" height="300">
+        <div class="amount">Amount: Rs <%= amount %></div>
+        <button class="btn">Proceed</button>
+    </div>
+
+    <script>
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition, showError);
+        } else {
+            document.getElementById("currentLocation").innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+
+    function showPosition(position) {
+        var latitude = position.coords.latitude;
+        var longitude = position.coords.longitude;
+        
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`)
+            .then(response => response.json())
+            .then(data => {
+                var address = data.display_name;
+                document.getElementById("currentLocation").innerHTML = address;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById("currentLocation").innerHTML = `${latitude}, ${longitude}`;
+            });
+    }
+
+    function showError(error) {
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                document.getElementById("currentLocation").innerHTML = "User denied the request for Geolocation."
+                break;
+            case error.POSITION_UNAVAILABLE:
+                document.getElementById("currentLocation").innerHTML = "Location information is unavailable."
+                break;
+            case error.TIMEOUT:
+                document.getElementById("currentLocation").innerHTML = "The request to get user location timed out."
+                break;
+            case error.UNKNOWN_ERROR:
+                document.getElementById("currentLocation").innerHTML = "An unknown error occurred."
+                break;
+        }
+    }
+
+    window.onload = getLocation;
+    </script>
+</body>
+</html>
